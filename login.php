@@ -10,7 +10,8 @@
             $user = $query->fetch();
             if ($user) {
                 if (isset($_POST['password'])) {
-                    $correct = $_POST['password'] == $user['password'];
+                    // $correct = $_POST['password'] == $user['password'];
+                    $correct = password_verify($_POST['password'], $user['password']);
                     if ($correct) {
                         $_SESSION['user_id'] = $user['id'];
                         $_SESSION['success'] = 'Вы успешно авторизовались!';

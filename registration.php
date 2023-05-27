@@ -12,11 +12,13 @@
             if ($user) {
                 $error = "Пользователь с таким логином уже существует";
             } else {
+                $passHash = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
                 $sql = "INSERT INTO users (login, password) VALUES (:login, :password)";
                 $query = $database->prepare($sql);
                 $query->execute([
                     'login' => $_POST['login'],
-                    'password' => $_POST['password']
+                    'password' => $passHash
                 ]);
                 $_SESSION['success'] = 'Вы успешно зарегистрировались!';
 
