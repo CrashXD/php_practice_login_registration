@@ -1,19 +1,16 @@
 <?php
     session_start();
-    require "connection.php";
+    require "functions.php";
 
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
         if (isset($_POST['login'])) {
-            $sql = "SELECT id, login, password FROM users WHERE login = :login";
-            $query = $database->prepare($sql);
-            $query->execute(['login' => $_POST['login']]);
-            $user = $query->fetch();
+            $user = getUser($_POST['login']);
             if ($user) {
                 if (isset($_POST['password'])) {
                     // $correct = $_POST['password'] == $user['password'];
                     $correct = password_verify($_POST['password'], $user['password']);
                     if ($correct) {
-                        $_SESSION['user_id'] = $user['id'];
+                        authorization($user['id']);
                         $_SESSION['success'] = 'Вы успешно авторизовались!';
                     } else {
                         $error = "Пароль введен неверно";

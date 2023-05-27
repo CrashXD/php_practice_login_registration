@@ -1,34 +1,21 @@
 <?php
     session_start();
     require "connection.php";
+    require "functions.php";
 
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
         if (isset($_POST['login']) && isset($_POST['password'])) {
-            $sql = "SELECT id FROM users WHERE login = :login";
-            $query = $database->prepare($sql);
-            $query->execute(['login' => $_POST['login']]);
-            $user = $query->fetch();
+            $user = getUser($_POST['login']);
 
             if ($user) {
                 $error = "Пользователь с таким логином уже существует";
             } else {
-                $passHash = password_hash($_POST['password'], PASSWORD_DEFAULT);
-
-                $sql = "INSERT INTO users (login, password) VALUES (:login, :password)";
-                $query = $database->prepare($sql);
-                $query->execute([
-                    'login' => $_POST['login'],
-                    'password' => $passHash
-                ]);
+                registration($_POST['login'], $_POST['password']);
                 $_SESSION['success'] = 'Вы успешно зарегистрировались!';
 
-                // $id = $database->lastInsertId();
-                $sql = "SELECT id FROM users WHERE login = :login";
-                $query = $database->prepare($sql);
-                $query->execute(['login' => $_POST['login']]);
-                $user = $query->fetch();
+                $user = getUser($_POST['login']);
 
-                $_SESSION['user_id'] = $user['id'];
+                authorization($user['id']);
             }
         }
     }

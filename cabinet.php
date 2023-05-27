@@ -1,6 +1,7 @@
 <?php
     session_start();
     require "connection.php";
+    require "functions.php";
 
     if (!isset($_SESSION['user_id'])) {
         header('Location: login.php');
@@ -8,11 +9,7 @@
 
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
         if (isset($_POST['login'])) {
-            $sql = 'SELECT id FROM users WHERE login = ?';
-            $query = $database->prepare($sql);
-            $query->execute([$_POST['login']]);
-
-            $user = $query->fetch();
+            $user = getUser($_POST['login']);
 
             if ($user) {
                 $error = 'Логин занят!';
