@@ -18,6 +18,7 @@
                     'login' => $_POST['login'],
                     'password' => $_POST['password']
                 ]);
+                $_SESSION['success'] = 'Вы успешно зарегистрировались!';
 
                 // $id = $database->lastInsertId();
                 $sql = "SELECT id FROM users WHERE login = :login";

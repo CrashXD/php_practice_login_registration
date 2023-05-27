@@ -1,7 +1,7 @@
 <?php
     $host = "127.0.0.1"; // хост
     $dbname = "project"; // название бд
-    $port = "3306"; // порт
+    $port = "3307"; // порт
     $user = "root"; // логин
     $password = ""; // пароль
     $dsn = "mysql:host={$host};dbname={$dbname};port={$port};";

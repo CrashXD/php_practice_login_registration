@@ -13,6 +13,7 @@
                     $correct = $_POST['password'] == $user['password'];
                     if ($correct) {
                         $_SESSION['user_id'] = $user['id'];
+                        $_SESSION['success'] = 'Вы успешно авторизовались!';
                     } else {
                         $error = "Пароль введен неверно";
                     }

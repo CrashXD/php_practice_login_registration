@@ -1,5 +1,10 @@
 <?php
     session_start();
+
+    if(isset($_SESSION['success'])) {
+        $success = $_SESSION['success'];
+        unset($_SESSION['success']);
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,6 +15,9 @@
     <title>Document</title>
 </head>
 <body>
+    <?php if (isset($success)): ?>
+        <p style="color: green;"><?= $success ?></p>
+    <?php endif; ?>
     <ul>
         <?php if (!isset($_SESSION['user_id'])): ?>
             <li><a href="login.php">Войти</a></li>

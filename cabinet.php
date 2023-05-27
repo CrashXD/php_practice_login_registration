@@ -1,6 +1,35 @@
 <?php
     session_start();
     require "connection.php";
+
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: login.php');
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] == "POST") {
+        if (isset($_POST['login'])) {
+            $sql = 'SELECT id FROM users WHERE login = ?';
+            $query = $database->prepare($sql);
+            $query->execute([$_POST['login']]);
+
+            $user = $query->fetch();
+
+            if ($user) {
+                $error = 'Логин занят!';
+            } else {
+                $sql = 'UPDATE users SET login = ? WHERE id = ?';
+                $query = $database->prepare($sql);
+                $query->execute([$_POST['login'], $_SESSION['user_id']]);
+                $success = 'Логин обновлен!';
+            }
+        }
+    }
+
+    if (isset($_SESSION['success'])) {
+        $success = $_SESSION['success'];
+        unset($_SESSION['success']);
+    }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,5 +45,11 @@
         <input type="text" name="login" value="" placeholder="Логин" required>
         <button>Сохранить</button>
     </form>
+    <?php if (isset($error)): ?>
+        <p style="color: red;"><?= $error ?></p>
+    <?php endif; ?>
+    <?php if (isset($success)): ?>
+        <p style="color: green;"><?= $success ?></p>
+    <?php endif; ?>
 </body>
 </html>
